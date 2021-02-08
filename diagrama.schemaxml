@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8mb4" collation="utf8mb4_general_ci">clinicamonterroza</database>
+</source>
+<canvas zoom="80">
+<tables>
+<table name="citas" view="colnames">
+<left>458</left>
+<top>164</top>
+<width>88</width>
+<height>130</height>
+<sql_create_table>CREATE TABLE `citas` (
+  `id_citas` int(10) NOT NULL AUTO_INCREMENT,
+  `fecha` date NOT NULL,
+  `hora` time NOT NULL,
+  `motivo` varchar(200) NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_citas`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="citas_recetas" view="colnames">
+<left>587</left>
+<top>42</top>
+<width>110</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `citas_recetas` (
+  `id_citas_recetas` int(10) NOT NULL AUTO_INCREMENT,
+  `id_citas` int(10) NOT NULL,
+  `id_recetas` int(10) NOT NULL,
+  PRIMARY KEY (`id_citas_recetas`),
+  KEY `id_citas` (`id_citas`),
+  KEY `id_recetas` (`id_recetas`),
+  CONSTRAINT `citas_recetas_ibfk_1` FOREIGN KEY (`id_citas`) REFERENCES `citas` (`id_citas`),
+  CONSTRAINT `citas_recetas_ibfk_2` FOREIGN KEY (`id_recetas`) REFERENCES `recetas` (`id_recetas`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="expediente" view="colnames">
+<left>147</left>
+<top>130</top>
+<width>106</width>
+<height>130</height>
+<sql_create_table>CREATE TABLE `expediente` (
+  `id_expediente` int(10) NOT NULL AUTO_INCREMENT,
+  `fecha_creacion` date NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  `id_paciente` int(10) NOT NULL,
+  `id_medico` int(10) NOT NULL,
+  PRIMARY KEY (`id_expediente`),
+  KEY `expediente_ibfk_1` (`id_medico`),
+  KEY `expediente_ibfk_2` (`id_paciente`),
+  CONSTRAINT `expediente_ibfk_1` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `expediente_ibfk_2` FOREIGN KEY (`id_paciente`) REFERENCES `paciente` (`id_paciente`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="expediente_citas" view="colnames">
+<left>306</left>
+<top>163</top>
+<width>132</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `expediente_citas` (
+  `id_expedientes_citas` int(10) NOT NULL AUTO_INCREMENT,
+  `id_expediente` int(10) NOT NULL,
+  `id_cita` int(10) NOT NULL,
+  PRIMARY KEY (`id_expedientes_citas`),
+  KEY `expediente_citas_ibfk_1` (`id_expediente`),
+  KEY `expediente_citas_ibfk_2` (`id_cita`),
+  CONSTRAINT `expediente_citas_ibfk_1` FOREIGN KEY (`id_expediente`) REFERENCES `expediente` (`id_expediente`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `expediente_citas_ibfk_2` FOREIGN KEY (`id_cita`) REFERENCES `citas` (`id_citas`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="medicamentos" view="colnames">
+<left>387</left>
+<top>358</top>
+<width>139</width>
+<height>154</height>
+<sql_create_table>CREATE TABLE `medicamentos` (
+  `id_medicamentos` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_medicamento` varchar(50) NOT NULL,
+  `activo` varchar(50) NOT NULL,
+  `tipo` varchar(50) NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  `id_laboratorio` int(10) NOT NULL,
+  PRIMARY KEY (`id_medicamentos`),
+  KEY `id_laboratorio` (`id_laboratorio`),
+  CONSTRAINT `medicamentos_ibfk_1` FOREIGN KEY (`id_laboratorio`) REFERENCES `laboratorios` (`id_laboratorios`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="medico" view="colnames">
+<left>4</left>
+<top>219</top>
+<width>110</width>
+<height>194</height>
+<sql_create_table>CREATE TABLE `medico` (
+  `id_medico` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_medico` varchar(50) NOT NULL,
+  `apellido_medico` varchar(50) NOT NULL,
+  `dui` varchar(10) NOT NULL,
+  `sexo` varchar(15) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `telefono` varchar(9) NOT NULL,
+  `correo` varchar(50) NOT NULL,
+  `direccion` varchar(200) NOT NULL,
+  `id_especialidad` int(10) NOT NULL,
+  PRIMARY KEY (`id_medico`),
+  KEY `id_especialidad` (`id_especialidad`),
+  CONSTRAINT `medico_ibfk_1` FOREIGN KEY (`id_especialidad`) REFERENCES `especialidad` (`id_especialidad`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="paciente" view="colnames">
+<left>6</left>
+<top>14</top>
+<width>116</width>
+<height>194</height>
+<sql_create_table>CREATE TABLE `paciente` (
+  `id_paciente` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_paciente` varchar(50) NOT NULL,
+  `apellido_paciente` varchar(50) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `sexo` varchar(15) NOT NULL,
+  `telefono` varchar(9) NOT NULL,
+  `correo` varchar(50) NOT NULL,
+  `direccion` varchar(200) NOT NULL,
+  `dui` varchar(10) NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  `id_aseguradora` int(10) NOT NULL,
+  PRIMARY KEY (`id_paciente`),
+  KEY `id_aseguradora` (`id_aseguradora`),
+  CONSTRAINT `paciente_ibfk_1` FOREIGN KEY (`id_aseguradora`) REFERENCES `aseguradora` (`id_aseguradora`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="recetas" view="colnames">
+<left>727</left>
+<top>156</top>
+<width>144</width>
+<height>121</height>
+<sql_create_table>CREATE TABLE `recetas` (
+  `id_recetas` int(10) NOT NULL AUTO_INCREMENT,
+  `horario` time NOT NULL,
+  `fecha_receta` date NOT NULL,
+  `dosis` varchar(5) NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_recetas`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="recetas_medicamentos" view="colnames">
+<left>559</left>
+<top>393</top>
+<width>156</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `recetas_medicamentos` (
+  `id_recetas_medicamentos` int(10) NOT NULL AUTO_INCREMENT,
+  `id_recetas` int(10) NOT NULL,
+  `id_medicamentos` int(10) NOT NULL,
+  PRIMARY KEY (`id_recetas_medicamentos`),
+  KEY `recetas_medicamentos_ibfk_1` (`id_recetas`),
+  KEY `recetas_medicamentos_ibfk_2` (`id_medicamentos`),
+  CONSTRAINT `recetas_medicamentos_ibfk_1` FOREIGN KEY (`id_recetas`) REFERENCES `recetas` (`id_recetas`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recetas_medicamentos_ibfk_2` FOREIGN KEY (`id_medicamentos`) REFERENCES `medicamentos` (`id_medicamentos`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="especialidad" view="colnames">
+<left>249</left>
+<top>340</top>
+<width>134</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `especialidad` (
+  `id_especialidad` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_especialidad` varchar(50) NOT NULL,
+  `comentario` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id_especialidad`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="usuarios" view="colnames">
+<left>138</left>
+<top>394</top>
+<width>84</width>
+<height>130</height>
+<sql_create_table>CREATE TABLE `usuarios` (
+  `id_usuario` int(10) NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(20) NOT NULL,
+  `contra` varchar(50) NOT NULL,
+  `tipo` int(1) NOT NULL,
+  `id_medico` int(10) NOT NULL,
+  PRIMARY KEY (`id_usuario`),
+  KEY `usuarios_ibfk_1` (`id_medico`),
+  CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`id_medico`) REFERENCES `medico` (`id_medico`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="diagnostico" view="colnames">
+<left>362</left>
+<top>32</top>
+<width>118</width>
+<height>117</height>
+<sql_create_table>CREATE TABLE `diagnostico` (
+  `id_diagnostico` int(10) NOT NULL AUTO_INCREMENT,
+  `diagnostico` varchar(300) NOT NULL,
+  `fecha_diagnostico` date NOT NULL,
+  `id_expediente` int(10) NOT NULL,
+  PRIMARY KEY (`id_diagnostico`),
+  KEY `diagnostico_ibfk_1` (`id_expediente`),
+  CONSTRAINT `diagnostico_ibfk_1` FOREIGN KEY (`id_expediente`) REFERENCES `expediente` (`id_expediente`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="laboratorios" view="colnames">
+<left>561</left>
+<top>284</top>
+<width>127</width>
+<height>90</height>
+<sql_create_table>CREATE TABLE `laboratorios` (
+  `id_laboratorios` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_laboratorio` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_laboratorios`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="aseguradora" view="colnames">
+<left>203</left>
+<top>24</top>
+<width>135</width>
+<height>90</height>
+<sql_create_table>CREATE TABLE `aseguradora` (
+  `id_aseguradora` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_aseguradora` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_aseguradora`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="examenes" view="colnames">
+<left>740</left>
+<top>397</top>
+<width>114</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `examenes` (
+  `id_examen` int(10) NOT NULL AUTO_INCREMENT,
+  `nombre_examen` varchar(200) NOT NULL,
+  `comentario` varchar(200) NOT NULL,
+  PRIMARY KEY (`id_examen`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+<table name="cita_examen" view="colnames">
+<left>884</left>
+<top>276</top>
+<width>109</width>
+<height>103</height>
+<sql_create_table>CREATE TABLE `cita_examen` (
+  `id_cita_examen` int(10) NOT NULL AUTO_INCREMENT,
+  `id_receta` int(10) NOT NULL,
+  `id_examen` int(10) NOT NULL,
+  PRIMARY KEY (`id_cita_examen`),
+  KEY `id_examen` (`id_examen`),
+  KEY `id_receta` (`id_receta`),
+  CONSTRAINT `cita_examen_ibfk_1` FOREIGN KEY (`id_examen`) REFERENCES `examenes` (`id_examen`),
+  CONSTRAINT `cita_examen_ibfk_2` FOREIGN KEY (`id_receta`) REFERENCES `recetas` (`id_recetas`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
