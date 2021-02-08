@@ -49,13 +49,19 @@
                                     <label for="lastName" class="form-label">Apellidos*</label>
                                     <input type="text" class="form-control" id="firstName" name="apellido" placeholder="Ingrese los apellidos" required>
                                 </div>
+                               
                                 <div class="col-sm-6">
-                                    <label for="lastName" class="form-label">Fecha de Nacimiento*</label>
-                                    <input type="date" class="form-control" id="firstName" name="fecha" required>
+                                    <label for="lastName" class="form-label">Correo / Usuario(Para inicio de sesión)*</label>
+                                    <input type="text" class="form-control" id="firstName" name="correo" placeholder="Ingrese el correo" required>
                                 </div>
                                 <div class="col-sm-6">
-                                    <label for="lastName" class="form-label">Correo(Para inicio de sesión)*</label>
-                                    <input type="text" class="form-control" id="firstName" name="correo" placeholder="Ingrese el correo" required>
+                                    <label for="firstName" class="form-label">Tipo</label>
+                                    <select name="tipo" class="form-control" id="firstName">
+                                        <option value="3">Administrador</option>
+                                        <option value="2">Encargado</option>
+                                        <option value="1" selected>Invitado</option>
+                                    </select>
+                                
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="lastName" class="form-label">Contraseña*</label>
@@ -72,29 +78,12 @@
                                         <button type='button' style='border:none;' id="mostrar2"><img src='../images/icons/formularios/contra.png' alt='x' />
                                         </button>
                                     </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="firstName" class="form-label">Sexo*</label>
-                                    <select name="sexo" class="form-control" id="firstName">
-                                        <option value="Hombre">Hombre</option>
-                                        <option value="Mujer">Mujer</option>
-                                    </select>
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="firstName" class="form-label">Tipo</label>
-                                    <select name="tipo"  class="form-control" id="firstName">
-                                        <option value="3">Administrador</option>
-                                        <option value="2" selected>Invitado</option>
-                                    </select>
                                     <br>
                                 </div>
-                                <div class="col-sm-12">
-                                    <label for="lastName" class="form-label">Imágen*</label>
-                                    <input type="file" class="form-control" id="firstName" name="imagen" required>
-                                    <br>
-                                </div>
+                                
+
                                 <div class="input-group">
-                                    <input type="submit" class="form-control text-white bg-success" id="enviar" name="send_insert" value="Registrar" readonly>
+                                    <input type="submit" class="form-control text-white bg-success" id="send_insert" name="send_insert" value="Registrar" readonly>
                                 </div>
                                 <br><br>
                 </form>
@@ -107,7 +96,7 @@
     </div>
     </div>
     <script>
-      $("#clave2").change(function() {
+        $("#clave2").change(function() {
             var contrasena = $("#clave1").val();
             var confirContrasena = $("#clave2").val();
             //console.log(contrasena+"   "+confirContrasena);
@@ -116,13 +105,17 @@
 
                     $("#clave1").css("border-color", "green");
                     $("#clave2").css("border-color", "green");
+                    $("#send_insert").css("display","block");
+                    
                 } else {
                     $("#clave1").css("border-color", "red");
                     $("#clave2").css("border-color", "red");
+                    $("#send_insert").css("display","none");
                 }
             } else {
                 $("#clave1").css("border-color", "red");
-                    $("#clave2").css("border-color", "red");
+                $("#clave2").css("border-color", "red");
+                $("#send_insert").css("display","none");
             }
         });
         $("#clave1").change(function() {
@@ -134,13 +127,16 @@
 
                     $("#clave1").css("border-color", "green");
                     $("#clave2").css("border-color", "green");
+                    $("#send_insert").css("display","block");
                 } else {
                     $("#clave1").css("border-color", "red");
                     $("#clave2").css("border-color", "red");
+                    $("#send_insert").css("display","none");
                 }
             } else {
                 $("#clave1").css("border-color", "red");
-                    $("#clave2").css("border-color", "red");
+                $("#clave2").css("border-color", "red");
+                $("#send_insert").css("display","none");
             }
         });
         //Mostrar claves
@@ -173,21 +169,21 @@
                 if (isset($_POST['send_busqueda'])) {
                     $valor = $_POST['busqueda'];
                     $pacientes = $conn->busquedaFree("SELECT * from usuario
-                    where nombre_usuario like '%$valor%' or apellido_usuario like '%$valor%' or correo like '%$valor%'");
-                
-                        foreach ($pacientes as $datos1) {
-                            $id = $datos1['id_usuario'];
-                            $nombre_usuario = $datos1["nombre_usuario"];
-                            $apellido_usuario = $datos1['apellido_usuario'];
-                            $correo_usuario = $datos1['correo'];
-                            $tipo = $datos1['tipo'];
-                            if ($tipo == 3) {
-                                $tipo = "Administrador";
-                            } else {
-                                $tipo = "Invitado";
-                            }
+                    where id_usuario not in(1) or nombre_usuario like '%$valor%' or apellido_usuario like '%$valor%' or correo like '%$valor%'");
 
-                            echo " <tr>
+                    foreach ($pacientes as $datos1) {
+                        $id = $datos1['id_usuario'];
+                        $nombre_usuario = $datos1["nombre_usuario"];
+                        $apellido_usuario = $datos1['apellido_usuario'];
+                        $correo_usuario = $datos1['correo'];
+                        $tipo = $datos1['tipo'];
+                        if ($tipo == 3) {
+                            $tipo = "Administrador";
+                        } else {
+                            $tipo = "Invitado";
+                        }
+
+                        echo " <tr>
                         <td>$nombre_usuario $apellido_usuario</td>
                         <td>$correo_usuario</td>
                         <td>$tipo</td>
@@ -240,6 +236,8 @@
                             $tipo = $datos1['tipo'];
                             if ($tipo == 3) {
                                 $tipo = "Administrador";
+                            } elseif ($tipo == 2) {
+                                $tipo = "Encargado";
                             } else {
                                 $tipo = "Invitado";
                             }
@@ -289,9 +287,9 @@
                                 echo '<li class="page-item"><a class="page-link" href="./index.php?x=usuarios.php&page=' . ($page + 1) . '"><span aria-hidden="true">&raquo;</span></a></li>';
                             }
                         }
-                        if($cant > $cant_salto){
-                            echo '&nbsp &nbsp' . $cant_salto .'&nbsp de &nbsp'. $cant . '</ul>';
-                        }else{
+                        if ($cant > $cant_salto) {
+                            echo '&nbsp &nbsp' . $cant_salto . '&nbsp de &nbsp' . $cant . '</ul>';
+                        } else {
                             echo "</ul>";
                         }
                         echo '</nav>';

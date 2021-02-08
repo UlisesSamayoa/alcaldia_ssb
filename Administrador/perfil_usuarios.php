@@ -59,21 +59,30 @@ if(isset($_POST['id_password'])){
             <div class="col-md-7 col-lg-12">
                 <form class="needs-validation" novalidate method="post" action="./mants/mant_usuarios.php">
                     <div class="row g-3">
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Nueva Contraseña</label>
-                            <input type="password" class="form-control" id="lastName" placeholder="" required>
-                        </div>
-                        <div class="col-sm-6">
-                            <label for="lastName" class="form-label">Repetir Contraseña</label>
-                            <input type="password" class="form-control" id="lastName" placeholder="" required>
-                        </div>
+                    <div class="col-sm-6">
+                                    <label for="lastName" class="form-label">Contraseña*</label>
+                                    <div class=" input-group">
+                                        <input type="password" class="form-control" id="clave1" name="clave1" placeholder="Ingrese contraseña" required>
+                                        <button type='button' style='border:none;' id="mostrar1"><img src='../images/icons/formularios/contra.png' alt='x' />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="lastName" class="form-label">Repetir Contraseña*</label>
+                                    <div class=" input-group">
+                                        <input type="password" class="form-control" id="clave2" name="clave2" id="clave2" placeholder="Repetir contraseña" required>
+                                        <button type='button' style='border:none;' id="mostrar2"><img src='../images/icons/formularios/contra.png' alt='x' />
+                                        </button>
+                                    </div>
+                                    <br>
+                                </div>
                     </div>
                     <br>
                     <div class="col-sm-12">
                         <div class="row g-3">
                             <div class="col-sm-6">
                                 <input type="hidden" name="id_us" value="<?php echo $id_med; ?>">
-                                <input type="submit" class="form-control text-white bg-primary" name="send_update" value="Actualizar" readonly>
+                                <input type="submit" class="form-control text-white bg-primary" id="send_update3" name="send_update3" value="Actualizar" readonly>
                             </div>
                             <div class="col-sm-6">
                                 <a href="?x=./usuarios.php" class="form-control text-white bg-success" style="text-align: center;">Regresar</a>
@@ -86,7 +95,63 @@ if(isset($_POST['id_password'])){
     </main>
     </div>
     <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $("#clave2").change(function() {
+            var contrasena = $("#clave1").val();
+            var confirContrasena = $("#clave2").val();
+            //console.log(contrasena+"   "+confirContrasena);
+            if (contrasena != '' && confirContrasena != '') {
+                if (contrasena === confirContrasena) {
 
+                    $("#clave1").css("border-color", "green");
+                    $("#clave2").css("border-color", "green");
+                    $("#send_update3").css("display","block");
+                    
+                } else {
+                    $("#clave1").css("border-color", "red");
+                    $("#clave2").css("border-color", "red");
+                    $("#send_update3").css("display","none");
+                }
+            } else {
+                $("#clave1").css("border-color", "red");
+                $("#clave2").css("border-color", "red");
+                $("#send_update3").css("display","none");
+            }
+        });
+        $("#clave1").change(function() {
+            var contrasena = $("#clave1").val();
+            var confirContrasena = $("#clave2").val();
+            //console.log(contrasena+"   "+confirContrasena);
+            if (contrasena != '' && confirContrasena != '') {
+                if (contrasena === confirContrasena) {
+
+                    $("#clave1").css("border-color", "green");
+                    $("#clave2").css("border-color", "green");
+                    $("#send_update3").css("display","block");
+                } else {
+                    $("#clave1").css("border-color", "red");
+                    $("#clave2").css("border-color", "red");
+                    $("#send_update3").css("display","none");
+                }
+            } else {
+                $("#clave1").css("border-color", "red");
+                $("#clave2").css("border-color", "red");
+                $("#send_update3").css("display","none");
+            }
+        });
+        //Mostrar claves
+        $("#mostrar1").click(function() {
+            if ($('#clave1').attr('type', 'password')) {
+                $('#clave1').attr('type', 'text');
+            }
+        });
+
+        $("#mostrar2").click(function() {
+            if ($('#clave2').attr('type', 'password')) {
+                $('#clave2').attr('type', 'text');
+            }
+        });
+    </script>
 </body>
 <?php
 }else{
@@ -132,6 +197,8 @@ if(isset($_POST['id_password'])){
         $tipo = $datos1["tipo"];
         if ($tipo == 3) {
             $tipo = "Administrador";
+        } elseif ($tipo == 2) {
+            $tipo = "Encargado";
         } else {
             $tipo = "Invitado";
         }
@@ -158,9 +225,13 @@ if(isset($_POST['id_password'])){
                             <label for="lastName" class="form-label">Apellidos</label>
                             <input type="text" class="form-control" id="lastName" placeholder="" value="<?php echo $apellido_medico; ?>" readonly>
                         </div>
-                        <div class="col-sm-12">
+                        <div class="col-sm-6">
                             <label for="lastName" class="form-label">Correo / Usuario</label>
                             <input type="text" class="form-control" id="lastName" placeholder="" value="<?php echo $usuario ;?>" readonly>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="lastName" class="form-label">Tipo</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="" value="<?php echo $tipo ;?>" readonly>
                         </div>
                     </div>
                     <br>

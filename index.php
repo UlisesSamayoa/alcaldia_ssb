@@ -9,7 +9,7 @@ if(isset($_SESSION['rol'])){
        header("location: Invitado/index.php");
      break;
       case 2:
-         header("location: Invitado/index.php");
+         header("location: Encargado/index.php");
        break;
     case 3:
        header("location: Administrador/index.php");

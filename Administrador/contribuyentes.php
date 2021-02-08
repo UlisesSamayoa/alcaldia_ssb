@@ -41,7 +41,12 @@
                                     <div class="col-sm-12">
                                         <label for="firstName" class="form-label">Subir archivo*</label>
                                         <input type="file" class="form-control" id="firstName" name="archivo" required>
-                                        <br><br>
+                                        
+                                    </div>
+                                    <div class="col-sm-12">
+                                    <br>
+                                        <p> <b>Por razones de seguridad se registran un maximo de 1,000 contribuyentes a la vez.</b></p>
+                                        <br>
                                     </div>
                                     <div class="input-group">
                                         <input type="submit" class="form-control text-white bg-success" id="enviar" name="send_insert2" value="Registrar" readonly>

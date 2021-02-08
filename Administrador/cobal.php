@@ -42,7 +42,12 @@
                                     <div class="col-sm-12">
                                         <label for="firstName" class="form-label">Subir Cobal*</label>
                                         <input type="file" class="form-control" id="firstName" name="archivo" required>
-<br><br>
+                                        <br>
+                                    </div>
+                                    <div class="col-sm-12">
+
+                                        <p> <b>Por razones de seguridad se registran un maximo de 1,000 cobales a la vez.</b></p>
+                                        <br>
                                     </div>
                                     <div class="input-group">
                                         <input type="submit" class="form-control text-white bg-success" id="enviar" name="send_insert" value="Registrar" readonly>
@@ -78,7 +83,7 @@
                     $conn = new baseD();
                     $filtro = $_POST['busqueda'];
                     $contribuyentes = $conn->busquedaFree("SELECT * FROM cobal
-                     WHERE nic LIKE '%$filtro%'");
+                     WHERE nic LIKE '%$filtro%' or periodo like '%$filtro%' or fecha_pago like '%$filtro%'");
                     foreach ($contribuyentes as $datos1) {
                         $id = $datos1['id_cobal'];
                         $nic = $datos1["nic"];
@@ -86,14 +91,14 @@
                         $periodo = $datos1['periodo'];
                         $fecha_pago = $datos1['fecha_pago'];
                         $total = $datos1['total'];
-                        
+
 
                         echo " <tr>
-                    <td>$nic</td>
-                    <td>$unicom</td>
-                    <td>$periodo</td>
-                    <td>$fecha_pago</td>
-                    <td>$total</td>
+                        <td>$nic</td>
+                        <td>$unicom</td>
+                        <td>$periodo</td>
+                        <td>$fecha_pago</td>
+                        <td>$total</td>
                     <td style='width:180px;'><div class='input-group'>
                <form action='?x=perfil_cobal.php' method='post' >
                 <input type='hidden' name='nic_perfil'  Value='" . $nic . "'>
@@ -145,7 +150,7 @@
                             $periodo = $datos1['periodo'];
                             $fecha_pago = $datos1['fecha_pago'];
                             $total = $datos1['total'];
-                            
+
 
                             echo " <tr>
                         <td>$nic</td>
@@ -176,27 +181,24 @@
                         //INICIO PAGINACIÓN
                         echo '<nav style="font-size:11px !important; height:150px; width:900px; overflow:auto;">';
                         echo '<ul class="pagination" >';
-                        if($total_pages > 1){
-                           
+                        if ($total_pages > 1) {
+
                             for ($i = 1; $i <= $total_pages; $i++) {
                                 if ($page == $i) {
                                     echo '<li class="page-item active"><a class="page-link" href="#">' . $page . '</a></li>';
                                 } else {
                                     echo '<li class="page-item"><a class="page-link" href="./index.php?x=cobal.php&page=' . $i . '">' . $i . '</a><li>';
-                                    if((fmod($i,25)==0)){
+                                    if ((fmod($i, 25) == 0)) {
                                         echo "</ul><ul class='pagination'>";
                                     }
-                                   
-                                    
                                 }
                             }
                         }
                         echo '</ul>';
                         echo '</nav>';
-                        if($cant > $cant_salto){
-                            echo '&nbsp &nbsp' . $cant_salto .'&nbsp de &nbsp'. $cant ;
-                        }else{
-                           
+                        if ($cant > $cant_salto) {
+                            echo '&nbsp &nbsp' . $cant_salto . '&nbsp de &nbsp' . $cant;
+                        } else {
                         }
                     }
                 }
